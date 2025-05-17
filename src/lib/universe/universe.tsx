@@ -401,14 +401,15 @@ export class Universe {
     }
 
     public getActiveBodies(target: number): Array<LeaderboardBody> {
-        const massRankings = new Array<LeaderboardBody>(this.settings.numBodies);
+        const massRankings = new Array<LeaderboardBody>(this.numActive);
+        let j = 0;
         for (let i = 0; i < this.settings.numBodies; i++) {
             // Skip inactive bodies
             if (!this.bodiesActive[i]) {
                 continue;
             }
 
-            massRankings[i] = {
+            massRankings[j] = {
                 index: i,
                 mass: this.masses[i],
                 color: `rgb(${this.colorsR[i] * 255}, ${this.colorsG[i] * 255}, ${this.colorsB[i] * 255})`,
@@ -417,8 +418,10 @@ export class Universe {
                 orbiting: this.orbitalIndices[i],
                 dOrbit: this.orbitalDistances[i],
                 orbitColor: `rgb(${this.colorsR[this.orbitalIndices[i]] * 255}, ${this.colorsG[this.orbitalIndices[i]] * 255}, ${this.colorsB[this.orbitalIndices[i]] * 255})`,
-                numSattelites: this.numSattelites[i],
+                numSatellites: this.numSattelites[i],
             };
+
+            j++;
         }
 
         return massRankings;

@@ -24,7 +24,7 @@ export interface LeaderboardBody {
     orbiting: number;
     dOrbit: number;
     orbitColor: string;
-    numSattelites: number;
+    numSatellites: number;
 }
 
 export interface LeaderboardProps {
@@ -40,7 +40,8 @@ export function Leaderboard(props: LeaderboardProps) {
     const { leaderboardBodies } = props;
     const [sortCriteria, setSortCriteria] = useState<SortCriteria>({ type: SortType.MASS, ascending: false });
     const sortedBodies = useMemo(() => {
-        return sortBodies(leaderboardBodies, sortCriteria);
+        const sorted = sortBodies(leaderboardBodies, sortCriteria);
+        return sorted;
     }, [sortCriteria, leaderboardBodies]);
 
     const [activeTab, setActiveTab] = useState<string>(LeaderboardTabType.BASIC);
@@ -180,7 +181,7 @@ function OrbitTabContent(props: TabContentProps) {
                             <td className="name">
                                 <BodySelectButton bodyIndex={body.index} bodyColor={body.color} />
                             </td>
-                            <td>{body.numSattelites}</td>
+                            <td>{body.numSatellites}</td>
                             <td className={body.orbiting != -1 ? "name" : ""}>
                                 {body.orbiting != -1 ? (
                                     <BodySelectButton bodyIndex={body.orbiting} bodyColor={body.orbitColor} />
@@ -407,7 +408,7 @@ interface SortCriteria {
 }
 
 function sortBodies(bodies: LeaderboardBody[], criteria: SortCriteria): LeaderboardBody[] {
-    return bodies.sort((a, b) => {
+    return bodies.toSorted((a, b) => {
         if (criteria.type === SortType.NAME) {
             return criteria.ascending ? a.index - b.index : b.index - a.index;
         } else if (criteria.type === SortType.MASS) {
@@ -438,8 +439,8 @@ function sortBodies(bodies: LeaderboardBody[], criteria: SortCriteria): Leaderbo
                 : b.dOrbit - a.dOrbit || a.index - b.index;
         } else if (criteria.type === SortType.NUM_SAT) {
             return criteria.ascending
-                ? a.numSattelites - b.numSattelites || a.index - b.index
-                : b.numSattelites - a.numSattelites || a.index - b.index;
+                ? a.numSatellites - b.numSatellites || a.index - b.index
+                : b.numSatellites - a.numSatellites || a.index - b.index;
         } else {
             // Default case for MASS in descending order
             return b.mass - a.mass;

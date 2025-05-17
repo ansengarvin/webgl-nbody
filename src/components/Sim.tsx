@@ -558,9 +558,12 @@ export function Sim(props: SimProps) {
                 */
                 uiAccumulatedTime += deltaTime;
                 if (uiAccumulatedTime >= uiThrottleTime) {
-                    setLeaderboardBodies(universe.current.getActiveBodies(bodyFollowedRef.current));
-                    dispatch({ type: "information/setNumActiveBodies", payload: universe.current.numActive });
-                    dispatch({ type: "information/setNumStars", payload: universe.current.getNumStars() });
+                    if (!pausedRef.current) {
+                        setLeaderboardBodies(universe.current.getActiveBodies(bodyFollowedRef.current));
+                        dispatch({ type: "information/setNumActiveBodies", payload: universe.current.numActive });
+                        dispatch({ type: "information/setNumStars", payload: universe.current.getNumStars() });
+                    }
+
                     dispatch({
                         type: "information/setNumActiveUniforms",
                         payload: starLightRef.current
